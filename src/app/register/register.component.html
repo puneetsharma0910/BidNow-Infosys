@@ -1,0 +1,103 @@
+<div class="bubble"></div>
+<div class="bubble"></div>
+<div class="bubble"></div>
+<div class="bubble"></div>
+<div class="bubble"></div>
+<div class="bubble"></div>
+<div class="bubble"></div>
+<div class="bubble"></div>
+<div class="register-container">
+    <h2>Create Account</h2>
+    <p class="subtitle">Join us and start your journey</p>
+  
+    <form (ngSubmit)="onRegister(registerForm)" #registerForm="ngForm" novalidate>
+      <div class="form-group">
+        <label for="name">Full Name</label>
+        <div class="input-container">
+          <i class="fas fa-user"></i>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            [(ngModel)]="name"
+            required
+            minlength="2"
+            #nameField="ngModel"
+            placeholder="Enter your full name"
+          />
+        </div>
+        <div *ngIf="nameField.invalid && nameField.touched" class="error">
+          Name must be at least 2 characters long.
+        </div>
+      </div>
+  
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <div class="input-container">
+          <i class="fas fa-envelope"></i>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            [(ngModel)]="email"
+            required
+            email
+            #emailField="ngModel"
+            placeholder="Enter your email"
+          />
+        </div>
+        <div *ngIf="emailField.invalid && emailField.touched" class="error">
+          Please enter a valid email address.
+        </div>
+      </div>
+  
+      <div class="form-group">
+        <label for="password">Password</label>
+        <div class="input-container">
+          <i class="fas fa-lock"></i>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            [(ngModel)]="password"
+            (input)="validatePassword(password)"
+            required
+            #passwordField="ngModel"
+            placeholder="Create a strong password"
+          />
+          
+        </div>
+        <div class="criteria">
+          <p [class.valid]="passwordCriteria.minLength">
+            <i [class]="passwordCriteria.minLength ? 'fas fa-check-circle' : 'fas fa-circle'"></i>
+            At least 8 characters
+          </p>
+          <p [class.valid]="passwordCriteria.upperCase">
+            <i [class]="passwordCriteria.upperCase ? 'fas fa-check-circle' : 'fas fa-circle'"></i>
+            One uppercase letter
+          </p>
+          <p [class.valid]="passwordCriteria.lowerCase">
+            <i [class]="passwordCriteria.lowerCase ? 'fas fa-check-circle' : 'fas fa-circle'"></i>
+            One lowercase letter
+          </p>
+          <p [class.valid]="passwordCriteria.specialChar">
+            <i [class]="passwordCriteria.specialChar ? 'fas fa-check-circle' : 'fas fa-circle'"></i>
+            One special character
+          </p>
+          <p [class.valid]="passwordCriteria.number">
+            <i [class]="passwordCriteria.number ? 'fas fa-check-circle' : 'fas fa-circle'"></i>
+            One number
+          </p>
+        </div>
+      </div>
+  
+      <button type="submit" [disabled]="!registerForm.valid">
+        <span *ngIf="!isLoading">Create Account</span>
+        <span *ngIf="isLoading" class="loader"></span>
+      </button>
+    </form>
+  
+    <div class="login-prompt">
+      Already have an account? <a routerLink="/login" class="login-link">Log In</a>
+    </div>
+  </div>

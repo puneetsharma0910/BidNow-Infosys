@@ -1,0 +1,68 @@
+<div class="auction-detail-container">
+    <div class="dashboard-button-container">
+      <button (click)="goToDashboard()" class="dashboard-button">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+          <polyline points="9 22 9 12 15 12 15 22"/>
+        </svg>
+        <span>Dashboard</span>
+      </button>
+    </div>
+  
+    <div class="auction-navigation">
+      <button (click)="viewPreviousAuction()" class="nav-button prev-button">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M15 18l-6-6 6-6"/>
+        </svg>
+      </button>
+      <button (click)="viewNextAuction()" class="nav-button next-button">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 18l6-6-6-6"/>
+        </svg>
+      </button>
+    </div>
+  
+    <div class="auction-content">
+      <div class="auction-header">
+        <h1>{{ auction.title }}</h1>
+        <img [src]="auction.imageUrl" alt="{{ auction.title }} image" class="auction-image">
+      </div>
+  
+      <div class="auction-info">
+        <p>{{ auction.info }}</p>
+        <div class="bid-details">
+          <div class="current-bid">
+            <span class="label">Starting Bid:</span>
+            <span class="value">${{ auction.currentBid || 0 }}</span>
+          </div>
+          <div class="time-left">
+            <span class="label">Time Left:</span>
+            <span class="value timer">{{ timer }}</span>
+          </div>
+        </div>
+      </div>
+  
+      <div class="auction-actions">
+        <div class="bid-input-container">
+          <input 
+            type="number" 
+            [(ngModel)]="userBidAmount" 
+            placeholder="Enter your bid" 
+            class="bid-input" 
+            min="0" 
+          />
+          <button (click)="placeBid()" class="place-bid-button">Place Bid</button>
+        </div>
+      </div>
+  
+      <div class="auction-bid-history">
+        <h3>Bid History</h3>
+        <ul>
+          <li *ngFor="let bid of bidHistory">
+            <span class="bid-timestamp">{{ bid.timestamp | date: 'short' }} - </span>
+            <span class="bid-details">{{ bid.bidder }}: ${{ bid.amount }}</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>

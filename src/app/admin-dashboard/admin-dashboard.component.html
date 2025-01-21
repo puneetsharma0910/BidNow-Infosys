@@ -1,0 +1,136 @@
+<!-- Admin Navigation Bar -->
+<div class="navbar">
+    <div class="logo">BidNow Admin</div>
+    <div class="nav-actions">
+        <button class="logout" (click)="logout()">Logout</button>
+    </div>
+</div>
+
+<!-- Admin Dashboard Header -->
+<div class="header">
+    <h1>Admin Dashboard</h1>
+    <p>Manage Auctions, Users, and Reports</p>
+</div>
+
+<!-- Add Auction Button -->
+<div class="action-container">
+    <button class="add-auction-btn" (click)="toggleAddAuctionForm()">+ Add Auction</button>
+</div>
+
+<!-- Add Auction Form Modal -->
+<div *ngIf="showAddAuctionForm" class="add-auction-form-modal">
+    <div class="add-auction-modal">
+        <h2>Add New Auction</h2>
+        <form (ngSubmit)="addAuction()">
+            <div class="form-group">
+                <label for="title">Auction Title</label>
+                <input type="text" id="title" [(ngModel)]="newAuction.title" name="title" required />
+            </div>
+            <div class="form-group">
+                <label for="info">Auction Description</label>
+                <textarea id="info" [(ngModel)]="newAuction.info" name="info" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="minimumBid">Minimum Bid</label>
+                <input type="number" id="minimumBid" [(ngModel)]="newAuction.minimumBid" name="minimumBid" required />
+            </div>
+            <div class="form-group">
+                <label for="auctionImage">Upload Image</label>
+                <input type="file" id="auctionImage" (change)="onImageSelected($event)" />
+            </div>
+            <div class="form-actions">
+                <button type="submit" class="submit-btn">Add Auction</button>
+                <button type="button" class="cancel-btn" (click)="toggleAddAuctionForm()">Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Auction Listings -->
+<div class="auction-section">
+    <h2>Current Auctions</h2>
+    <div class="auction-filters">
+        <label for="filter">Filter Auctions:</label>
+        <select [(ngModel)]="selectedFilter" (change)="applyFilters()" id="filter">
+            <option value="current">Current</option>
+            <option value="upcoming">Upcoming</option>
+            <option value="past">Past</option>
+        </select>
+        <input [(ngModel)]="searchQuery" (input)="searchAuctions()" placeholder="Search Auctions" />
+    </div>
+
+    <div class="auction-list">
+        <div class="auction-item" *ngFor="let auction of filteredCurrentAuctions">
+            <img [src]="auction.imageUrl || 'assets/placeholder.jpg'" alt="{{ auction.title }}" />
+            <div class="details">
+                <h3>{{ auction.title }}</h3>
+                <p><strong>Current Bid:</strong> ${{ auction.currentBid || 'No bids yet' }}</p>
+                <div class="auction-actions">
+                    <button class="action-btn approve" (click)="approveAuction(auction)">Approve</button>
+                    <button class="action-btn reject" (click)="rejectAuction(auction)">Reject</button>
+                    <button class="action-btn delete" (click)="deleteAuction(auction)">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Approved Auctions Section -->
+<div class="approved-auction-section" [attr.data-has-items]="approvedAuctions.length > 0">
+    <h2>Approved Auctions</h2>
+    <div class="auction-list">
+      <div class="auction-item" *ngFor="let auction of approvedAuctions">
+        <img [src]="auction.imageUrl || 'assets/placeholder.jpg'" alt="{{ auction.title }}" />
+        <div class="details">
+          <h3>{{ auction.title }}</h3>
+          <p><strong>Current Bid:</strong> ${{ auction.currentBid || 'No bids yet' }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Rejected Auctions Section -->
+  <div class="rejected-auction-section" [attr.data-has-items]="rejectedAuctions.length > 0">
+    <h2>Rejected Auctions</h2>
+    <div class="auction-list">
+      <div class="auction-item" *ngFor="let auction of rejectedAuctions">
+        <img [src]="auction.imageUrl || 'assets/placeholder.jpg'" alt="{{ auction.title }}" />
+        <div class="details">
+          <h3>{{ auction.title }}</h3>
+          <p><strong>Current Bid:</strong> ${{ auction.currentBid || 'No bids yet' }}</p>
+        </div>
+      </div>
+    </div>
+  </div>  
+
+<!-- User Management Section -->
+<div class="user-management">
+    <h2>User Management</h2>
+    <div class="user-list">
+        <div class="user-item" *ngFor="let user of users">
+            <p><strong>{{ user.name }}</strong> ({{ user.email }})</p>
+            <div class="user-actions">
+                <button class="action-btn" (click)="viewUserDetails(user)">View Details</button>
+                <button class="action-btn" (click)="blockUser(user)">Block</button>
+                <button class="action-btn delete" (click)="deleteUser(user)">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Dispute Resolution Section -->
+<div class="dashboard-disputes">
+    <h2>Disputes</h2>
+    <p><strong> Disputes: {{ stats.totalDisputes }}</strong></p>
+    <p><strong>Open Disputes: {{ stats.openDisputes }}</strong></p>
+    <button class="action-btn" (click)="navigateToDisputes()">Manage Disputes</button>
+  </div>  
+
+<!-- Logs and Analytics -->
+<div class="logs-analytics">
+    <h2>Activity Logs and Analytics</h2>
+    <p><strong>Total Users:</strong> {{ stats.totalUsers }}</p>
+    <p><strong>Total Auctions:</strong> {{ stats.totalAuctions }}</p>
+    <p><strong>Active Bids:</strong> {{ stats.activeBids }}</p>
+    <button class="action-btn" (click)="viewDetailedLogs()">View Detailed Logs</button>
+</div>
